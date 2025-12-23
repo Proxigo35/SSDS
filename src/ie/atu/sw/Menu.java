@@ -1,34 +1,11 @@
 package ie.atu.sw;
 
 import java.util.Scanner;
-import java.io.File;
 
 public class Menu {
 	
-	private static File queryFile;
-	
-	protected static void setQueryFile(File file) {
-		queryFile = file;
-	}
-
-	private static File subjectFile;
-	
-	protected static void setSubjectFile(File file) {
-		subjectFile = file;
-	}
-	
-	private static File outputFile;
-	
-	protected static void setOutputFile(File file) {
-		outputFile = file;
-	}
-
-	protected static File getOutputFile() {
-		return outputFile;
-	}
-	
 	// Initialise the starting folder to use when navigating files (Set to the home directory of the current user)
-	private static File startingFolder = new File(System.getProperty("user.home"));
+	// private static File startingFolder = new File(System.getProperty("user.home"));
 	
 	// Prints the main menu
 	protected static void printMenu() {
@@ -42,10 +19,10 @@ public class Menu {
 		System.out.println("*************************************************************" + ConsoleColour.RESET);
 		
 		// The short hand if statement is used to only print the input and output file names if these files have been selected
-		System.out.println("1. Specify query file." + (queryFile == null ? "" : ConsoleColour.GREEN + " (Currently " + queryFile.getName() + ")" + ConsoleColour.RESET));
-		System.out.println("2. Specify subject file." + (subjectFile == null ? "" : ConsoleColour.GREEN + " (Currently " + subjectFile.getName() + ")" + ConsoleColour.RESET));
-		System.out.println("3. Specify output file." + (outputFile == null ? "" : ConsoleColour.GREEN + " (Currently " + outputFile.getName() + ")" + ConsoleColour.RESET));
-		System.out.println("4. Execute, Analyse and Report");
+		System.out.println("1. Specify query file." + (Files.get("query") == null ? "" : ConsoleColour.GREEN + " (Currently " + Files.get("query").getName() + ")" + ConsoleColour.RESET));
+		System.out.println("2. Specify subject file." + (Files.get("subject") == null ? "" : ConsoleColour.GREEN + " (Currently " + Files.get("subject").getName() + ")" + ConsoleColour.RESET));
+		System.out.println("3. Specify output file." + (Files.get("output") == null ? "" : ConsoleColour.GREEN + " (Currently " + Files.get("output").getName() + ")" + ConsoleColour.RESET));
+		System.out.println("4. Execute, Analyse and Report.");
 		System.out.println("5. Quit.\n");
 		System.out.print(ConsoleColour.CYAN + "Select option: " + ConsoleColour.RESET); 
 		
@@ -61,16 +38,12 @@ public class Menu {
 			// Loop to ensure user has selected a valid option before proceeding
 			while (true) {
 				
-				// If the input from the user is not an integer or is out of bounds of the range of possible options, 
-				// the catch statement block will be executed
+				// User must enter integer between 1 and 5 to proceed with program. 
 				try {
 					option = Integer.parseInt(scanner.nextLine());
-					if (option < 1 || option > 5) throw new IllegalArgumentException("Out of range");
-					break;
-				} catch (Exception e) {
-					// Prompt the user to enter a suitable option
-					System.out.print(ConsoleColour.RED + "\nPlease enter an integer between 1 and 5: " + ConsoleColour.RESET);
-				}
+					if (option >= 1 && option <= 5) break;
+				} catch (NumberFormatException e) {}
+				System.out.println(ConsoleColour.RED + "Please enter a valid integer between 1 and 5." + ConsoleColour.RESET);
 			}
 			
 			// The scanner that was initialised is passed into the next stage of the program,
