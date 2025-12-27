@@ -8,11 +8,13 @@ public class Files {
 	private static File subjectFile;
 	private static File outputFile;
 
-	protected static void set(String filename, File file) {
-		if (filename == "query") queryFile = file;
+	protected static boolean set(String filename, File file) {
+		if (file == null) return false;
+		else if (filename == "query") queryFile = file;
 		else if (filename == "subject") subjectFile = file;
 		else if (filename == "output") outputFile = file;
 		else throw new IllegalArgumentException("Invalid filename entered.");
+		return true;
 	}
 	
 	protected static File get(String filename) {

@@ -13,6 +13,7 @@ public class Runner {
 	public static void main(String[] args) throws Exception {
 		
 		Menu.printMenu();
+		Menu.getInput();
 		
 		System.out.print(ConsoleColour.YELLOW);	//Change the colour of the console text
 		int size = 100;							//The size of the meter. 100 equates to 100%
