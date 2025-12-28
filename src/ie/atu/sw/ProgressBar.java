@@ -18,13 +18,6 @@ public class ProgressBar {
         }
         
         System.out.print("\r" + sb + complete + "%");
-        
-        if (done == total) System.out.println("\n");
+        if (index == total) System.out.println("\n");
     }
-		// System.out.print(ConsoleColour.YELLOW);	//Change the colour of the console text
-		// int size = 100;							//The size of the meter. 100 equates to 100%
-		// for (int i = 0 ; i < size ; i++) {		//The loop equates to a sequence of processing steps
-		// 	ProgressBar.print(i + 1, size); 	//After each (some) steps, update the progress meter
-		// 	Thread.sleep(10);					//Slows things down so the animation is visible 
-		// }
 }
