@@ -1,23 +1,27 @@
 package ie.atu.sw;
 
+/**
+* Console progress bar.
+*/
 public class ProgressBar {
 
-	public static void print(int index, int total) {
-		if (index > total) return;	//Out of range
-        int size = 50; 				//Must be less than console width
-	    char done = '█';
-	    char todo = '░';
-	    
-	    //Compute basic metrics for the meter
-        int complete = (100 * index) / total;
-        int completeLen = size * complete / 100;
-        
-        StringBuilder sb = new StringBuilder();
+	/**
+	* Prints a console-based progress bar.
+	*
+	* @param index the current progress value
+	* @param total the total value representing 100% completion
+	*/
+    public static void print(int index, int total) {
+        int size = 50; // Must be less than console width.
+        int percent = (100 * index) / total;
+        int filled = size * percent / 100;
+
+        StringBuilder bar = new StringBuilder();
         for (int i = 0; i < size; i++) {
-        	sb.append((i < completeLen) ? done : todo);
+            bar.append(i < filled ? '█' : '░');
         }
-        
-        System.out.print("\r" + sb + complete + "%");
-        if (index == total) System.out.println("\n");
+
+        System.out.print(ConsoleColour.YELLOW + "\r" + bar + " " + percent + "%" + ConsoleColour.RESET);
+        if (index == total) System.out.println();
     }
 }

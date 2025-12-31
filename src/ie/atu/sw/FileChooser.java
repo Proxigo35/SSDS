@@ -2,64 +2,40 @@ package ie.atu.sw;
 
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
-import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 
+/**
+* Allows the user to select a file using the operating systems native file navigator.
+*/
 public class FileChooser {
-	
-	private static JFrame createParent() {
-		JFrame frame = new JFrame();
-		frame.setUndecorated(true);
-		frame.setSize(0, 0);
-		frame.setLocationRelativeTo(null);
-		frame.setAlwaysOnTop(true);
-		frame.setVisible(true);
-		return frame;
-	}
 
+	/**
+	* Opens a native file chooser dialog to allow the user to select a text file.
+	*
+	* @return the selected {@link File}, or {@code null} if no file was chosen
+	*/
 	public static File chooseFile() {
-		final File[] result = new File[1];
 
-		Runnable task = () -> {
-			JFrame parent = createParent(); 
-			JFileChooser chooser = new JFileChooser(new File(System.getProperty("user.home")));
-			chooser.setDialogTitle("Select a .txt file");
-    		chooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt"));
-			chooser.requestFocusInWindow();
-			if (chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) result[0] = chooser.getSelectedFile();
-			parent.dispose();
-		};
+		// selected must be a final variable to be able to be used within lamda expression.
+		// So they array is final, but the first element can be changed safely.
+        final File[] selected = new File[1];
 
 		try {
-			if (SwingUtilities.isEventDispatchThread()) task.run();
-			else SwingUtilities.invokeAndWait(task);
+            SwingUtilities.invokeAndWait(() -> {
+                JFileChooser chooser = new JFileChooser();
+				
+				// Accept only text files.
+                chooser.setFileFilter(new FileNameExtensionFilter("Text files (*.txt)", "txt"));
+                chooser.setAcceptAllFileFilterUsed(false);
+
+				// If a file was chosen, update selected with a reference to the file.
+                if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) selected[0] = chooser.getSelectedFile();
+            });
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Something went wrong when trying to open file choose window.");
 		}
 
-		return result[0];
-	}
-
-	public static File chooseSaveFile() {
-		final File[] result = new File[1];
-
-		Runnable task = () -> {
-			JFileChooser chooser = new JFileChooser(new File(System.getProperty("user.home")));
-			chooser.setDialogTitle("Save output file");
-			chooser.setSelectedFile(new File("output.txt"));
-			int choice = chooser.showSaveDialog(null);
-			if (choice == JFileChooser.APPROVE_OPTION) result[0] = chooser.getSelectedFile();
-		};
-
-		try {
-			if (SwingUtilities.isEventDispatchThread()) task.run();
-			else SwingUtilities.invokeAndWait(task);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return result[0];
-	}
-
+        return selected[0];
+    }
 }
